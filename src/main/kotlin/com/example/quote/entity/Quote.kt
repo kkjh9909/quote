@@ -1,8 +1,6 @@
 package com.example.quote.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -10,6 +8,7 @@ import java.util.UUID
 class Quote {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     var id: String = UUID.randomUUID().toString()
 
     var content: String? = null
@@ -17,4 +16,10 @@ class Quote {
     var createdAt: LocalDateTime? = null
 
     var updatedAt: LocalDateTime? = null
+
+    @ManyToOne
+    var category: Category? = null
+
+    @ManyToOne
+    var author: Author? = null
 }
