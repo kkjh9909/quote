@@ -16,6 +16,8 @@ class Author {
 
     var name: String? = null
 
+    var photo: String? = null
+
     var createdAt: LocalDateTime? = null
 
     var updatedAt: LocalDateTime? = null
