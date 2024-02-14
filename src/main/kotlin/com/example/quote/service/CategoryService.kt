@@ -1,5 +1,6 @@
 package com.example.quote.service
 
+import com.example.quote.entity.Category
 import com.example.quote.repository.CategoryRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -19,6 +20,10 @@ class CategoryService(
         val category = categoryRepository.findById(categoryId)
 
         return CategoryInfo(category.get().id, category.get().category)
+    }
+
+    fun getAllCategories(): List<CategoryDto> {
+        return categoryRepository.findAll().map { category -> CategoryDto(category.id, category.category) }
     }
 }
 
