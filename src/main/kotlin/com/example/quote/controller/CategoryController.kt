@@ -28,10 +28,19 @@ class CategoryController(
         model.addAttribute("quotes", quoteSummary.quoteSummaryList)
         model.addAttribute("totalPages", quoteSummary.totalPages)
 
-        println(pageable.pageNumber)
-
         model.addAttribute("currentPage", pageable.pageNumber)
 
-        return "category-page"
+        return "quotes-page"
+    }
+
+    @GetMapping("/categories")
+    fun getCategoriesPage(model: Model, pageable: Pageable): String {
+        val categories = categoryService.getCategoryList(pageable)
+
+        model.addAttribute("totalPages", categories.totalPages)
+        model.addAttribute("categories", categories.categoryList)
+        model.addAttribute("currentPage", pageable.pageNumber)
+
+        return "categories-page"
     }
 }
