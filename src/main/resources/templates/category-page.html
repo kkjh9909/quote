@@ -10,7 +10,8 @@
     <title>Document</title>
 </head>
 <body>
-<div class="container mt-5">
+<div th:insert="~{fragments/header :: header}"></div>
+<div class="container">
     <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">
