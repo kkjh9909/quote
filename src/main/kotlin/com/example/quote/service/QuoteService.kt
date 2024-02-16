@@ -5,6 +5,7 @@ import com.example.quote.repository.AuthorRepository
 import com.example.quote.repository.CategoryRepository
 import com.example.quote.repository.QuoteRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
@@ -30,8 +31,18 @@ class QuoteService(
         val quote = Quote.create(category.get(), author.get(), content)
         quoteRepository.save(quote)
     }
+
+    fun getTodayQuote(): QuoteDto {
+        val max = quoteRepository.count()
+        val index = (0 until max).random().toInt()
+
+        val quote = quoteRepository.findAll(PageRequest.of(index, 1))
+        return QuoteDto(quote.content[0].content, quote.content[0].author.name, quote.content[0].author.photo)
+    }
 }
 
 data class QuoteSummary(val totalPages: Int, val quoteSummaryList: List<QuoteSummaryList>)
 
 data class QuoteSummaryList(val id: String, val content: String?, val author: String?)
+
+data class QuoteDto(val content: String, val author: String, val photo: String)

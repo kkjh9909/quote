@@ -14,9 +14,9 @@ class Author {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: String = UUID.randomUUID().toString()
 
-    var name: String? = null
+    lateinit var name: String
 
-    var photo: String? = null
+    lateinit var photo: String
 
     var createdAt: LocalDateTime? = null
 

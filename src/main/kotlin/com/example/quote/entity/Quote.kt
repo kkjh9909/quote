@@ -16,17 +16,17 @@ class Quote {
     @Column(columnDefinition = "BINARY(16)")
     var id: String = UUID.randomUUID().toString()
 
-    var content: String? = null
+    lateinit var content: String
 
     var createdAt: LocalDateTime? = null
 
     var updatedAt: LocalDateTime? = null
 
     @ManyToOne
-    var category: Category? = null
+    lateinit var category: Category
 
     @ManyToOne
-    var author: Author? = null
+    lateinit var author: Author
 
     companion object {
         fun create(category: Category, author: Author, content: String): Quote {
