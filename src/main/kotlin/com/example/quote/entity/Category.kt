@@ -14,7 +14,9 @@ class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: String = UUID.randomUUID().toString()
 
-    var category: String? = null
+    lateinit var name: String
+
+    var quoteCount: Int = 0
 
     var createdAt: LocalDateTime? = null
 

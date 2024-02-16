@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 class CategoryController(
@@ -34,12 +35,16 @@ class CategoryController(
     }
 
     @GetMapping("/categories")
-    fun getCategoriesPage(model: Model, pageable: Pageable): String {
-        val categories = categoryService.getCategoryList(pageable)
+    fun getCategoriesPage(model: Model,
+                          @RequestParam(value = "order", defaultValue = "alpha") order: String,
+                          @PageableDefault(size = 10) pageable: Pageable)
+    : String {
+        val categories = categoryService.getCategoryList(pageable, order)
 
         model.addAttribute("totalPages", categories.totalPages)
         model.addAttribute("categories", categories.categoryList)
         model.addAttribute("currentPage", pageable.pageNumber)
+        model.addAttribute("sort", order)
 
         return "categories-page"
     }

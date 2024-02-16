@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class QuoteService(
@@ -24,11 +25,15 @@ class QuoteService(
         return QuoteSummary(quotes.totalPages, quotes.content.map { quote -> QuoteSummaryList(quote.id, quote.content, quote.author?.name) })
     }
 
+    @Transactional
     fun addQuote(categoryId: String, authorId: String, content: String) {
         val category = categoryRepository.findById(categoryId)
         val author = authorRepository.findById(authorId)
 
         val quote = Quote.create(category.get(), author.get(), content)
+        category.get().quoteCount++;
+        author.get().quoteCount++;
+
         quoteRepository.save(quote)
     }
 

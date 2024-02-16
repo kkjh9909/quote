@@ -2,6 +2,7 @@ package com.example.quote.service
 
 import com.example.quote.entity.Category
 import com.example.quote.repository.CategoryRepository
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -14,27 +15,32 @@ class CategoryService(
     fun getCategories(): List<CategoryDto> {
         val categories = categoryRepository.findAll(PageRequest.of(0, 10)).content
 
-        return categories.map { category -> CategoryDto(category.id, category.category) }
+        return categories.map { category -> CategoryDto(category.id, category.name) }
     }
 
     fun getCategoryName(categoryId: String): CategoryInfo? {
         val category = categoryRepository.findById(categoryId)
 
-        return CategoryInfo(category.get().id, category.get().category)
+        return CategoryInfo(category.get().id, category.get().name)
     }
 
     fun getAllCategories(): List<CategoryDto> {
-        return categoryRepository.findAll().map { category -> CategoryDto(category.id, category.category) }
+        return categoryRepository.findAll().map { category -> CategoryDto(category.id, category.name) }
     }
 
-    fun getCategoryList(pageable: Pageable): CategoryList {
-        val categories = categoryRepository.findAll(pageable)
+    fun getCategoryList(pageable: Pageable, order: String): CategoryList {
+        val categories: Page<Category>
 
-        return CategoryList(categories.totalPages, categories.content.map {category -> CategoryDto(category.id, category.category) })
+        if(order == "popular")
+            categories = categoryRepository.findAllByOrderByQuoteCountDesc(pageable)
+        else
+            categories = categoryRepository.findAllByOrderByName(pageable)
+
+        return CategoryList(categories.totalPages, categories.content.map {category -> CategoryDto(category.id, category.name) })
     }
 }
 
 data class CategoryInfo(val id: String, val name: String?)
-data class CategoryDto(val id: String, val category: String?)
+data class CategoryDto(val id: String, val category: String)
 
 data class CategoryList(val totalPages: Int, val categoryList: List<CategoryDto>)

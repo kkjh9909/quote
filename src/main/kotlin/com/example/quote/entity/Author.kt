@@ -18,6 +18,8 @@ class Author {
 
     lateinit var photo: String
 
+    var quoteCount = 0
+
     var createdAt: LocalDateTime? = null
 
     var updatedAt: LocalDateTime? = null
