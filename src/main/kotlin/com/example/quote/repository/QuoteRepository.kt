@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface QuoteRepository: JpaRepository<Quote, String> {
     fun findByCategory(category: Category, pageable: Pageable): Page<Quote>
+
+    fun findByOrderByUpdatedAtDesc(pageable: Pageable): Page<Quote>
 }

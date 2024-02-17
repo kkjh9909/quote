@@ -19,10 +19,14 @@ class HomeController(
         val authors = authorService.getAuthors()
         val categories = categoryService.getCategories()
         val todayQuote = quoteService.getTodayQuote()
+        val latestQuotes = quoteService.getLatestQuotes()
+
 
         model.addAttribute("todayQuote", todayQuote)
         model.addAttribute("authors", authors)
         model.addAttribute("categories", categories)
+        model.addAttribute("latestQuotes", latestQuotes)
+
         return "index";
     }
 
