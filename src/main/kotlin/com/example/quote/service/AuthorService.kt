@@ -2,7 +2,7 @@ package com.example.quote.service
 
 import com.example.quote.entity.Author
 import com.example.quote.repository.AuthorRepository
-import org.hibernate.internal.util.collections.CollectionHelper.listOf
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -20,13 +20,16 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         return authorRepository.findAll().map { author -> AuthorDto(author.id, author.name) };
     }
 
-    fun getAuthorList(pageable: Pageable): AuthorList {
-        val authors = authorRepository.findAll(pageable)
+    fun getAuthorList(pageable: Pageable, order: String): AuthorList {
+        val authors: Page<Author> = if (order == "popular")
+            authorRepository.findAllByOrderByQuoteCountDesc(pageable)
+        else
+            authorRepository.findAllByOrderByName(pageable)
 
         return AuthorList(authors.totalPages, authors.content.map { author -> AuthorDto(author.id, author.name) })
     }
 }
 
-data class AuthorDto(var id: String, var name: String?)
+data class AuthorDto(var id: String, var name: String)
 
 data class AuthorList(val totalPages: Int, val authorList: List<AuthorDto>)
