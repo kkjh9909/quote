@@ -60,6 +60,22 @@ class QuoteService(
             QuoteSummary(quotes.totalPages, quotes.content.map { quote -> QuoteSummaryList(quote.id, quote.content, quote.author.name) })
         }
     }
+
+    fun getQuoteDetail(quoteId: String): QuoteDto {
+        val quote = quoteRepository.findById(quoteId)
+
+        return QuoteDto(quote.get().content, quote.get().author.name, quote.get().author.photo)
+    }
+
+    fun getRelatedQuote(quoteId: String): List<RelatedQuote> {
+        val quote = quoteRepository.findById(quoteId)
+
+        val category = quote.get().category
+
+        return  quoteRepository.findTop10ByCategoryOrderByUpdatedAtDesc(category)
+            .filter { it.id != quoteId }
+            .map { RelatedQuote(it.id, it.content, it.author.name, it.author.photo) }
+    }
 }
 
 data class QuoteSummary(val totalPages: Int, val quoteSummaryList: List<QuoteSummaryList>)
@@ -69,3 +85,5 @@ data class QuoteSummaryList(val id: String, val content: String, val author: Str
 data class QuoteDto(val content: String, val author: String, val photo: String)
 
 data class LatestQuote(val id: String, val content: String)
+
+data class RelatedQuote(val id: String, val content: String, val author: String, val photo: String)
