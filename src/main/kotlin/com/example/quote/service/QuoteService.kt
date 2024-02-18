@@ -22,7 +22,7 @@ class QuoteService(
 
         val quotes: Page<Quote> = quoteRepository.findByCategory(category.get(), pageable)
 
-        return QuoteSummary(quotes.totalPages, quotes.content.map { quote -> QuoteSummaryList(quote.id, quote.content, quote.author?.name) })
+        return QuoteSummary(quotes.totalPages, quotes.content.map { quote -> QuoteSummaryList(quote.id, quote.content, quote.author.name) })
     }
 
     @Transactional
@@ -50,11 +50,21 @@ class QuoteService(
 
         return quotes.map { quote -> LatestQuote(quote.id, quote.content) }
     }
+
+    fun searchQuote(query: String, pageable: Pageable): QuoteSummary {
+        val quotes = quoteRepository.findByContentContaining(query, pageable)
+
+        return if (quotes.isEmpty) {
+            QuoteSummary(0, emptyList())
+        } else {
+            QuoteSummary(quotes.totalPages, quotes.content.map { quote -> QuoteSummaryList(quote.id, quote.content, quote.author.name) })
+        }
+    }
 }
 
 data class QuoteSummary(val totalPages: Int, val quoteSummaryList: List<QuoteSummaryList>)
 
-data class QuoteSummaryList(val id: String, val content: String?, val author: String?)
+data class QuoteSummaryList(val id: String, val content: String, val author: String)
 
 data class QuoteDto(val content: String, val author: String, val photo: String)
 

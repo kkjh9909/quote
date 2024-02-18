@@ -3,6 +3,8 @@ package com.example.quote.controller
 import com.example.quote.service.AuthorService
 import com.example.quote.service.CategoryService
 import com.example.quote.service.QuoteService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -36,6 +38,24 @@ class QuoteController(
 
         return "quote-add"
     }
+
+    @GetMapping("/search")
+    fun searchQuote(@RequestParam query: String,
+                    @PageableDefault(size = 10) pageable: Pageable,
+                    model: Model
+    ): String {
+        println(query)
+
+        val quotes = quoteService.searchQuote(query, pageable)
+
+        model.addAttribute("quotes", quotes.quoteSummaryList)
+        model.addAttribute("totalPages", quotes.totalPages)
+        model.addAttribute("currentPage", pageable.pageNumber)
+        model.addAttribute("query", query)
+
+
+        return "quotes-search-page"
+    }
 }
 
 data class QuoteAdd(
@@ -43,3 +63,5 @@ data class QuoteAdd(
     val authorId: String,
     val content: String
 )
+
+data class Query(val query: String)

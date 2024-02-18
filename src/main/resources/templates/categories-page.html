@@ -62,24 +62,24 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <!-- 이전 버튼 -->
-                <li th:class="page-item">
+                <li th:if="${currentPage > 0}" th:class="page-item">
                     <a th:class="page-link"
                        th:href="@{/categories(page=${currentPage - 1}, order=${sort})}">
                         Previous
                     </a>
                 </li>
 
-                <li th:each="page: ${#numbers.sequence(currentPage/5 * 5 + 1, currentPage/5 * 5 + 5)}"
+                <li th:each="page: ${#numbers.sequence(currentPage/5 * 5 + 1, T(java.lang.Math).min(currentPage/5 * 5 + 5, totalPages))}"
                     th:class="${page - 1 == currentPage} ? 'page-item active' : 'page-item'">
                     <a th:class="page-link"
                        th:text="${page}"
                        th:href="@{/categories(page=${page - 1}, order=${sort})}">
                     </a>
                 </li>
-                <li th:class="page-item">
+                <li th:if="${currentPage + 1 < totalPages}" th:class="page-item">
                     <a th:class="page-link"
                        th:href="@{/categories(page=${currentPage + 1}, order=${sort})}">
-                        Previous
+                        Next
                     </a>
                 </li>
             </ul>

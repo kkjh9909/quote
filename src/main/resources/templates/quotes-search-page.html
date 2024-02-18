@@ -28,28 +28,22 @@
             <th>
                 <div class="row">
                     <div class="col-auto">
-                        저자
-                    </div>
-                    <div class="col text-end">
-                        <select name="sort" id="sort" class="form-select-sm" onchange="sortCategory()">
-                            <option th:selected="${sort == 'alpha'}" value="alpha">가나다순</option>
-                            <option th:selected="${sort == 'popular'}" value="popular">인기순</option>
-                        </select>
+                        검색 결과
                     </div>
                 </div>
             </th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="author : ${authors}">
+        <th:block th:each="quote : ${quotes}">
             <tr>
-                <th th:onclick="'location.href=\'' + @{'/author/' + ${author.id}} + '\';'" class="link-primary">
+                <th th:onclick="'location.href=\'' + @{'/quote/' + ${quote.id}} + '\';'" class="link-primary">
                     <div class="row">
-                        <div class="col-auto">
-                            <span th:text="${author.name}"></span>
+                        <div class="simply-text">
+                            <span th:text="${quote.content}"></span>
                         </div>
-                        <div class="col text-end">
-                            <button class="btn btn-primary">바로가기</button>
+                        <div class="text-end">
+                            <span th:text="'-' + ${quote.author} + '-'"></span>
                         </div>
                     </div>
                 </th>
@@ -62,20 +56,19 @@
             <!-- 이전 버튼 -->
             <li th:if="${currentPage > 0}" th:class="page-item">
                 <a th:class="page-link"
-                   th:href="@{/authors(page=${currentPage - 1}, order=${sort})}">
+                   th:href="@{/categories(page=${currentPage - 1}, order=${sort})}">
                     Previous
                 </a>
             </li>
-
             <li th:each="page: ${#numbers.sequence(currentPage/5 * 5 + 1, T(java.lang.Math).min(currentPage/5 * 5 + 5, totalPages))}"
                 th:class="${page - 1 == currentPage} ? 'page-item active' : 'page-item'">
                 <a th:class="page-link" th:text="${page}"
-                   th:href="@{/authors(page=${page - 1}, order=${sort})}"
+                   th:href="@{/authors(page=${page - 1}, query=${query})}"
                 ></a>
             </li>
             <li th:if="${currentPage + 1 < totalPages}" th:class="page-item">
                 <a th:class="page-link"
-                   th:href="@{/authors(page=${currentPage + 1}, order=${sort})}">
+                   th:href="@{/categories(page=${currentPage + 1}, order=${sort})}">
                     Next
                 </a>
             </li>
