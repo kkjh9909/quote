@@ -76,6 +76,15 @@ class QuoteService(
             .filter { it.id != quoteId }
             .map { RelatedQuote(it.id, it.content, it.author.name, it.author.photo) }
     }
+
+    fun getQuotesByAuthor(authorId: String, pageable: Pageable): QuoteSummary {
+        val author = authorRepository.findById(authorId)
+
+        val quotes = quoteRepository.findByAuthor(author.get(), pageable)
+
+        return QuoteSummary(quotes.totalPages, quotes.count(),
+            quotes.content.map { QuoteSummaryList(it.id, it.content, it.author.name) })
+    }
 }
 
 data class QuoteSummary(val totalPages: Int, val count: Int, val quoteSummaryList: List<QuoteSummaryList>)

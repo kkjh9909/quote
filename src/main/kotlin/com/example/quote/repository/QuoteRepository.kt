@@ -1,5 +1,6 @@
 package com.example.quote.repository
 
+import com.example.quote.entity.Author
 import com.example.quote.entity.Category
 import com.example.quote.entity.Quote
 import org.springframework.data.domain.Page
@@ -15,4 +16,5 @@ interface QuoteRepository: JpaRepository<Quote, String> {
     fun findByContentContaining(query: String, pageable: Pageable): Page<Quote>
 
     fun findTop10ByCategoryOrderByUpdatedAtDesc(category: Category): List<Quote>
+    fun findByAuthor(author: Author, pageable: Pageable): Page<Quote>
 }

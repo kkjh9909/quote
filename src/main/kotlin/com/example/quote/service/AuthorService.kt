@@ -28,6 +28,12 @@ class AuthorService(private val authorRepository: AuthorRepository) {
 
         return AuthorList(authors.totalPages, authors.content.map { author -> AuthorDto(author.id, author.name) })
     }
+
+    fun getAuthorName(authorId: String): String {
+        val author = authorRepository.findById(authorId)
+
+        return author.get().name
+    }
 }
 
 data class AuthorDto(var id: String, var name: String)
