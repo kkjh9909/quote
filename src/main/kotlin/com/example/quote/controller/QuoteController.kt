@@ -45,7 +45,6 @@ class QuoteController(
                     @PageableDefault(size = 10) pageable: Pageable,
                     model: Model
     ): String {
-        println(query)
 
         val quotes = quoteService.searchQuote(query, pageable)
 
@@ -53,7 +52,7 @@ class QuoteController(
         model.addAttribute("totalPages", quotes.totalPages)
         model.addAttribute("currentPage", pageable.pageNumber)
         model.addAttribute("query", query)
-
+        model.addAttribute("count", quotes.count)
 
         return "quotes-search-page"
     }

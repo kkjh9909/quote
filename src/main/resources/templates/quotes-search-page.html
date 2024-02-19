@@ -17,18 +17,47 @@
 			else
 				window.location="/authors?order=" + 'alpha'
 		}
+
+        function searchQuote() {
+			const word = document.getElementById("word").value;
+
+			if(word.length < 2)
+			    alert("최소 2글자 이상의 검색어를 입력해주세요.")
+			else
+			    location.href = "/search?query=" + word
+		}
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter')
+                searchQuote();
+        }
     </script>
 </head>
 <body>
 <div th:insert="~{fragments/header :: header}"></div>
 <div class="container">
+    <div class="row mt-2">
+        <div class="col">
+            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search" id="word" onkeypress="handleKeyPress(event)">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-success" th:onclick="searchQuote()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <hr>
     <table class="table">
         <thead>
         <tr>
             <th>
                 <div class="row">
                     <div class="col-auto">
-                        검색 결과
+                        <span th:text="${query}"></span>
+                        에 대한 검색 결과
+                        <span th:text="'(' + ${count} + ')'"></span>
                     </div>
                 </div>
             </th>
@@ -51,7 +80,11 @@
         </th:block>
         </tbody>
     </table>
-    <nav aria-label="Page navigation example">
+    <div class="text-center" th:if="${totalPages < 1}">
+        <img src="image/empty.PNG" alt="이미지" class="img-fluid">
+        <h3>검색 결과가 없어요~~</h3>
+    </div>
+    <nav aria-label="Page navigation example" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center">
             <!-- 이전 버튼 -->
             <li th:if="${currentPage > 0}" th:class="page-item">
