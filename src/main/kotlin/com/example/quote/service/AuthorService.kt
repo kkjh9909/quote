@@ -13,11 +13,11 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     fun getAuthors(): List<AuthorDto> {
         val authors: List<Author> = authorRepository.findAll(PageRequest.of(0, 10)).content
 
-        return authors.map { author -> AuthorDto(author.id, author.name) }
+        return authors.map { author -> AuthorDto(author.id, author.name, author.quoteCount) }
     }
 
     fun getAllAuthors(): List<AuthorDto> {
-        return authorRepository.findAll().map { author -> AuthorDto(author.id, author.name) };
+        return authorRepository.findAll().map { author -> AuthorDto(author.id, author.name, author.quoteCount) };
     }
 
     fun getAuthorList(pageable: Pageable, order: String): AuthorList {
@@ -26,7 +26,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         else
             authorRepository.findAllByOrderByName(pageable)
 
-        return AuthorList(authors.totalPages, authors.content.map { author -> AuthorDto(author.id, author.name) })
+        return AuthorList(authors.totalPages, authors.content.map { author -> AuthorDto(author.id, author.name, author.quoteCount) })
     }
 
     fun getAuthorName(authorId: String): String {
@@ -36,6 +36,6 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     }
 }
 
-data class AuthorDto(var id: String, var name: String)
+data class AuthorDto(val id: String, val name: String, val count: Int)
 
 data class AuthorList(val totalPages: Int, val authorList: List<AuthorDto>)

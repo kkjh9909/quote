@@ -36,11 +36,12 @@ class CategoryService(
         else
             categories = categoryRepository.findAllByOrderByName(pageable)
 
-        return CategoryList(categories.totalPages, categories.content.map {category -> CategoryDto(category.id, category.name) })
+        return CategoryList(categories.totalPages, categories.content.map {category -> CategoryDtoWithCount(category.id, category.name, category.quoteCount) })
     }
 }
 
 data class CategoryInfo(val id: String, val name: String?)
 data class CategoryDto(val id: String, val category: String)
 
-data class CategoryList(val totalPages: Int, val categoryList: List<CategoryDto>)
+data class CategoryDtoWithCount(val id: String, val category: String, val count: Int)
+data class CategoryList(val totalPages: Int, val categoryList: List<CategoryDtoWithCount>)
