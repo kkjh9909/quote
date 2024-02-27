@@ -52,7 +52,9 @@
                             <p th:text="${todayQuote.content}">"오늘 할 일을 내일로 미루지 마라"</p>
                         </div>
                         <div class="text-end">
-                            <p th:text="'-' + ${todayQuote.author} + '-'">저자</p>
+                            <a th:href="@{'/author/' + ${todayQuote.id}}">
+                                <p th:text="'-' + ${todayQuote.author} + '-'">저자</p>
+                            </a>
                         </div>
                     </div>
                 </div>

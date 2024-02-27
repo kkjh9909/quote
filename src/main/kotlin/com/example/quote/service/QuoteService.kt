@@ -42,7 +42,7 @@ class QuoteService(
         val index = (0 until max).random().toInt()
 
         val quote = quoteRepository.findAll(PageRequest.of(index, 1))
-        return QuoteDto(quote.content[0].content, quote.content[0].author.name, quote.content[0].author.photo)
+        return QuoteDto(quote.content[0].author.id, quote.content[0].content, quote.content[0].author.name, quote.content[0].author.photo)
     }
 
     fun getLatestQuotes(): List<LatestQuote> {
@@ -64,7 +64,7 @@ class QuoteService(
     fun getQuoteDetail(quoteId: String): QuoteDto {
         val quote = quoteRepository.findById(quoteId)
 
-        return QuoteDto(quote.get().content, quote.get().author.name, quote.get().author.photo)
+        return QuoteDto(quote.get().id, quote.get().content, quote.get().author.name, quote.get().author.photo)
     }
 
     fun getRelatedQuote(quoteId: String): List<RelatedQuote> {
@@ -91,7 +91,7 @@ data class QuoteSummary(val totalPages: Int, val count: Int, val quoteSummaryLis
 
 data class QuoteSummaryList(val id: String, val content: String, val author: String)
 
-data class QuoteDto(val content: String, val author: String, val photo: String)
+data class QuoteDto(val id: String, val content: String, val author: String, val photo: String)
 
 data class LatestQuote(val id: String, val content: String)
 
