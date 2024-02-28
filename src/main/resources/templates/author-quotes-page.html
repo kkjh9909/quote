@@ -19,7 +19,7 @@
 				window.location="/categories?order=" + 'alpha'
 		}
     </script>
-    <title>Document</title>
+    <title th:text="${author}">Document</title>
 </head>
 <body>
 <div th:insert="~{fragments/header :: header}"></div>
