@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <script type="text/javascript" th:inline="javascript">
+		function asdasd() {
+			const option = document.querySelector('select[name="sort"]').value;
+
+			console.log(option)
+
+			if(option === "popular")
+				window.location="/categories?order=" + 'popular'
+			else
+				window.location="/categories?order=" + 'alpha'
+		}
+    </script>
+    <title>문의사항</title>
+
+    <meta name="google-site-verification" content="dfCocKxAKm02TrZOrhOi6yjgM0vE3qvZ-l2NF0F4Orc" />
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="post: ${posts}">
+                <tr>
+                    <td th:text="${post.number}">00</td>
+                    <td th:text="${post.title}">00</td>
+                    <td th:text="${post.writer}">00</td>
+                    <td th:text="${post.date}">00</td>
+                    <td th:text="${post.hits}">00</td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+    <div class="text-end">
+        <button class="btn btn-lg btn-primary" th:onclick="|window.location='/post/write'|">
+            글쓰기
+        </button>
+    </div>
+</div>
+<script th:inline="javascript">
+</script>
+</body>
+</html>

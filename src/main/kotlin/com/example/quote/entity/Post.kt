@@ -21,9 +21,15 @@ class Post {
 
     lateinit var content: String
 
+    var number: Int? = null
+
     lateinit var writer: String
 
-    var createdAt: LocalDateTime? = null
+    lateinit var address: String
 
-    var updatedAt: LocalDateTime? = null
+    var hits: Int? = null
+
+    lateinit var createdAt: LocalDateTime
+
+    lateinit var updatedAt: LocalDateTime
 }

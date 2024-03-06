@@ -7,3 +7,8 @@ a {
     overflow: hidden;
     white-space:nowrap;
 }
+
+textarea {
+    width: 100%;
+    resize: none;
+}
