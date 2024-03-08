@@ -46,13 +46,16 @@ class QuoteController(
                     model: Model
     ): String {
 
-        val quotes = quoteService.searchQuote(query, pageable)
+        val response = quoteService.searchQuote(query, pageable)
+        if(response.totalPages <= pageable.pageNumber)
+            return "redirect:/search?page=${response.totalPages}&query=${query}"
 
-        model.addAttribute("quotes", quotes.quoteSummaryList)
-        model.addAttribute("totalPages", quotes.totalPages)
-        model.addAttribute("currentPage", pageable.pageNumber)
+
+        model.addAttribute("quotes", response.quoteSummaryList)
+        model.addAttribute("totalPages", response.totalPages)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
         model.addAttribute("query", query)
-        model.addAttribute("count", quotes.count)
+        model.addAttribute("count", response.count)
 
         return "quotes-search-page"
     }

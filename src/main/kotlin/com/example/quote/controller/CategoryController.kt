@@ -23,13 +23,16 @@ class CategoryController(
                         model: Model): String {
 
         val category = categoryService.getCategoryName(categoryId);
-        val quoteSummary = quoteService.getQuoteList(categoryId, pageable)
+        val response = quoteService.getQuoteList(categoryId, pageable)
+
+        if(response.totalPages <= pageable.pageNumber)
+            return "redirect:/category/${categoryId}?page=${response.totalPages}"
 
         model.addAttribute("category", category)
-        model.addAttribute("quotes", quoteSummary.quoteSummaryList)
-        model.addAttribute("totalPages", quoteSummary.totalPages)
+        model.addAttribute("quotes", response.quoteSummaryList)
+        model.addAttribute("totalPages", response.totalPages)
 
-        model.addAttribute("currentPage", pageable.pageNumber)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
 
         return "quotes-page"
     }
@@ -43,7 +46,7 @@ class CategoryController(
 
         model.addAttribute("totalPages", categories.totalPages)
         model.addAttribute("categories", categories.categoryList)
-        model.addAttribute("currentPage", pageable.pageNumber)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
         model.addAttribute("sort", order)
 
         return "categories-page"

@@ -1,10 +1,8 @@
 package com.example.quote.controller
 
-import com.example.quote.repository.QuoteRepository
 import com.example.quote.service.AuthorService
 import com.example.quote.service.QuoteService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -23,11 +21,14 @@ class AuthorController(
                           @RequestParam(value = "order", defaultValue = "alpha") order: String,
                           @PageableDefault(size = 10) pageable: Pageable)
     : String {
-        val authors = authorService.getAuthorList(pageable, order)
+        val response = authorService.getAuthorList(pageable, order)
 
-        model.addAttribute("totalPages", authors.totalPages)
-        model.addAttribute("authors", authors.authorList)
-        model.addAttribute("currentPage", pageable.pageNumber)
+        if(response.totalPages <= pageable.pageNumber)
+            return "redirect:/authors?page=${response.totalPages}"
+
+        model.addAttribute("totalPages", response.totalPages)
+        model.addAttribute("authors", response.authorList)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
         model.addAttribute("sort", order)
 
         return "authors-page"

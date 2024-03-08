@@ -89,21 +89,21 @@
     <nav aria-label="Page navigation example" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center">
             <!-- 이전 버튼 -->
-            <li th:if="${currentPage > 0}" th:class="page-item">
+            <li th:if="${currentPage > 1}" th:class="page-item">
                 <a th:class="page-link"
-                   th:href="@{/categories(page=${currentPage - 1}, order=${sort})}">
+                   th:href="@{/search(page=${currentPage - 1}, query=${query})}">
                     Previous
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(currentPage/5 * 5 + 1, T(java.lang.Math).min(currentPage/5 * 5 + 5, totalPages))}"
-                th:class="${page - 1 == currentPage} ? 'page-item active' : 'page-item'">
+            <li th:each="page: ${#numbers.sequence((currentPage - 1)/5 * 5 + 1, T(java.lang.Math).min((currentPage - 1)/5 * 5 + 5, totalPages))}"
+                th:class="${page == currentPage} ? 'page-item active' : 'page-item'">
                 <a th:class="page-link" th:text="${page}"
-                   th:href="@{/authors(page=${page - 1}, query=${query})}"
+                   th:href="@{/search(page=${page}, query=${query})}"
                 ></a>
             </li>
-            <li th:if="${currentPage + 1 < totalPages}" th:class="page-item">
+            <li th:if="${currentPage < totalPages}" th:class="page-item">
                 <a th:class="page-link"
-                   th:href="@{/categories(page=${currentPage + 1}, order=${sort})}">
+                   th:href="@{/search(page=${currentPage + 1}, query=${query})}">
                     Next
                 </a>
             </li>
