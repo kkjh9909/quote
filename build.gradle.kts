@@ -34,6 +34,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.projectlombok:lombok")
+    implementation ("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
 }
 
 

@@ -1,12 +1,17 @@
 package com.example.quote.controller
 
 import com.example.quote.service.PostService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ResponseStatus
 
 @Controller
 class PostController(
@@ -14,13 +19,43 @@ class PostController(
 ) {
 
     @GetMapping("/posts")
-    fun getPosts(@PageableDefault(sort = ["updatedAt"], direction = Sort.Direction.ASC) pageable: Pageable,
+    fun getPosts(@PageableDefault(sort = ["updatedAt"], direction = Sort.Direction.DESC, size = 10) pageable: Pageable,
                  model: Model
     ): String {
-        val posts = postService.getPosts(pageable)
+        val response = postService.getPosts(pageable)
 
-        model.addAttribute("posts", posts)
+        if(response.totalPages <= pageable.pageNumber)
+            return "redirect:/posts?page=${response.totalPages}"
+
+        model.addAttribute("posts", response.posts)
+        model.addAttribute("totalPages", response.totalPages)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
 
         return "posts-page"
     }
+
+    @GetMapping("/post/write")
+    fun getPostWritePage(): String {
+        return "post-write"
+    }
+
+    @PostMapping("/post/write")
+    @ResponseStatus(value = HttpStatus.OK)
+    fun writePost(@RequestBody writePostRequest: WritePostRequest, request: HttpServletRequest) {
+        val clientIp = getClientIp(request)
+
+        postService.writePost(writePostRequest, clientIp)
+    }
+
+
+    private fun getClientIp(request: HttpServletRequest): String {
+        val forwardedForHeader = request.getHeader("X-Forwarded-For")
+        return if (forwardedForHeader != null && forwardedForHeader.isNotEmpty()) {
+            forwardedForHeader.split(",").first().trim()
+        } else {
+            request.remoteAddr
+        }
+    }
 }
+
+data class WritePostRequest(val writer: String, val password: String, val title: String, val content: String)
