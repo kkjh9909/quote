@@ -15,5 +15,5 @@ interface PostRepository: JpaRepository<Post, String> {
     @Query("update Post p set p.hits = p.hits + 1 where p.id = :id")
     fun increaseHits(@Param("id") id: String): Int
 
-    fun findByNumber(number: SequenceNumber): Post
+    fun findTop10ByOrderByUpdatedAtDesc(): List<Post>
 }

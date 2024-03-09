@@ -57,8 +57,10 @@ class PostController(
     @GetMapping("/post/{postId}")
     fun getPostPage(@PathVariable postId: String, model: Model): String {
         val response = postService.getPost(postId)
+        val recentPostsResponse = postService.getRecentPosts()
 
         model.addAttribute("postDetails", response)
+        model.addAttribute("recentPosts", recentPostsResponse)
 
         return "post-page"
     }

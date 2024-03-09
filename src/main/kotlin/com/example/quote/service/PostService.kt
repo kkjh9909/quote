@@ -5,6 +5,7 @@ import com.example.quote.entity.Post
 import com.example.quote.entity.SequenceNumber
 import com.example.quote.repository.PostRepository
 import com.example.quote.repository.SequenceNumberRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -38,6 +39,12 @@ class PostService(
         val post = postRepository.findById(postId).get()
 
         return PostDetailDto(post.id, post.title, post.number?.id, post.writer, post.hits, post.address, post.content, post.updatedAt)
+    }
+
+    fun getRecentPosts(): List<PostDto> {
+        val posts = postRepository.findTop10ByOrderByUpdatedAtDesc()
+
+        return posts.map { PostDto(it.id, it.title, it.number?.id, it.writer, it.hits, it.address, it.updatedAt) }
     }
 }
 
