@@ -9,11 +9,6 @@
     <link th:href="@{/css/main.css}" rel="stylesheet" />
     <title th:text="${quote.content}">Document</title>
     <script type="text/javascript" th:inline="javascript">
-		function searchQuote() {
-			const word = document.getElementById("word").value;
-
-			location.href = "/search?query=" + word
-		}
     </script>
 
     <meta name="google-site-verification" content="dfCocKxAKm02TrZOrhOi6yjgM0vE3qvZ-l2NF0F4Orc" />
@@ -52,16 +47,18 @@
         </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row align-items-stretch">
         <div class="col-3" th:each="relatedQuote: ${relatedQuotes}">
             <div class="card">
                 <img th:src="${relatedQuote.photo}" class="card-img-top" alt="author">
                 <div class="card-body">
-                    <p class="card-text" th:text="${relatedQuote.content}"></p>
+                    <p class="card-text simply-text" th:text="${relatedQuote.content}"></p>
                     <div class="text-end">
-                        <p class="card-text" th:text="'-' + ${relatedQuote.author} + '-'"></p>
+                        <p class="card-text simply-text" th:text="'-' + ${relatedQuote.author} + '-'"></p>
                     </div>
-                    <a th:href="@{'/quote/' + ${relatedQuote.id}}" class="btn btn-primary">바로가기</a>
+                    <div class="text-center">
+                        <a th:href="@{'/quote/' + ${relatedQuote.id}}" class="btn btn-primary">바로가기</a>
+                    </div>
                 </div>
             </div>
         </div>
