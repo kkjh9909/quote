@@ -39,13 +39,16 @@ class AuthorController(
                             @PageableDefault(size = 10) pageable: Pageable,
                             @PathVariable authorId: String
     ): String  {
-        val quotes = quoteService.getQuotesByAuthor(authorId, pageable)
+        val quotesResponse = quoteService.getQuotesByAuthor(authorId, pageable)
         val author = authorService.getAuthorName(authorId)
 
-        model.addAttribute("quotes", quotes.quoteSummaryList)
-        model.addAttribute("currentPage", pageable.pageNumber)
-        model.addAttribute("totalPages", quotes.totalPages)
-        model.addAttribute("count", quotes.count)
+        if(quotesResponse.totalPages < pageable.pageNumber)
+            return "redirect:/author/${authorId}?page=${quotesResponse.totalPages}"
+
+        model.addAttribute("quotes", quotesResponse.quoteSummaryList)
+        model.addAttribute("currentPage", pageable.pageNumber + 1)
+        model.addAttribute("totalPages", quotesResponse.totalPages)
+        model.addAttribute("count", quotesResponse.count)
         model.addAttribute("authorId", authorId)
         model.addAttribute("author", author)
 

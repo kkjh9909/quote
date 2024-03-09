@@ -21,7 +21,7 @@ class PostController(
     ): String {
         val response = postService.getPosts(pageable)
 
-        if(response.totalPages <= pageable.pageNumber)
+        if(response.totalPages < pageable.pageNumber)
             return "redirect:/posts?page=${response.totalPages}"
 
         model.addAttribute("posts", response.posts)

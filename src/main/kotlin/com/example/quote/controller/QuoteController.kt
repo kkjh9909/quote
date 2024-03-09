@@ -47,7 +47,7 @@ class QuoteController(
     ): String {
 
         val response = quoteService.searchQuote(query, pageable)
-        if(response.totalPages <= pageable.pageNumber)
+        if(response.totalPages < pageable.pageNumber)
             return "redirect:/search?page=${response.totalPages}&query=${query}"
 
 

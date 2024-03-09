@@ -25,7 +25,7 @@ class CategoryController(
         val category = categoryService.getCategoryName(categoryId);
         val response = quoteService.getQuoteList(categoryId, pageable)
 
-        if(response.totalPages <= pageable.pageNumber)
+        if(response.totalPages < pageable.pageNumber)
             return "redirect:/category/${categoryId}?page=${response.totalPages}"
 
         model.addAttribute("category", category)
@@ -42,10 +42,13 @@ class CategoryController(
                           @RequestParam(value = "order", defaultValue = "alpha") order: String,
                           @PageableDefault(size = 10) pageable: Pageable)
     : String {
-        val categories = categoryService.getCategoryList(pageable, order)
+        val response = categoryService.getCategoryList(pageable, order)
 
-        model.addAttribute("totalPages", categories.totalPages)
-        model.addAttribute("categories", categories.categoryList)
+        if(response.totalPages < pageable.pageNumber)
+            return "redirect:/category?page=${response.totalPages}"
+
+        model.addAttribute("totalPages", response.totalPages)
+        model.addAttribute("categories", response.categoryList)
         model.addAttribute("currentPage", pageable.pageNumber + 1)
         model.addAttribute("sort", order)
 
